@@ -287,7 +287,7 @@ st.markdown(f"""
     <div class="hero-bg"></div>
     <div class="hero-content">
         <img src="data:image/png;base64,{logo_b64}" class="logo-img" alt="لوگو">
-        <h1 class="hero-title">شرکت توزیعنیروی  برق تهران بزرگ</h1>
+        <h1 class="hero-title">شرکت توزیع نیروی  برق تهران بزرگ</h1>
         <p class="hero-subtitle">نرم افزار محاسبه نیروگاه های خورشیدی</p>
         <div class="hero-stats">
             <div class="stat-item">
