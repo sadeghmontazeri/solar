@@ -27,6 +27,19 @@ def format_currency(amount):
     else:
         return f"{to_persian_number(int(amount/1_000_000))} میلیون"
 
+# ================== بارگذاری تصاویر ==================
+def get_base64_image(image_path):
+    try:
+        with open(image_path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+    except:
+        return ""
+
+logo_b64 = get_base64_image("logo.png")
+bg1_b64 = get_base64_image("bg1.jpg")
+bg2_b64 = get_base64_image("bg2.jpg")
+bg3_b64 = get_base64_image("bg3.jpg")
+
 # ================== تابع بارگذاری فونت ==================
 def load_font(font_path):
     try:
@@ -44,24 +57,30 @@ def load_font(font_path):
                 html, body, [class*="css"], .stMarkdown, .stMetric, h1, h2, h3, h4, h5, p, span, div, label {{
                     font-family: 'IRANYekanX', sans-serif !important;
                     direction: rtl;
-                    text-align: right;
+                    text-align: center;
                 }}
                 
                 .main .block-container {{
-                    padding: 2rem 2rem;
-                    max-width: 1200px;
+                    padding: 0 !important;
+                    max-width: 100% !important;
                 }}
                 
                 [data-testid="stMetricValue"] {{
-                    font-size: 1.5rem !important;
+                    font-size: clamp(1rem, 3vw, 1.5rem) !important;
                     font-weight: bold;
                     color: #00C853 !important;
+                    text-align: center !important;
+                }}
+                
+                [data-testid="stMetricLabel"] {{
+                    text-align: center !important;
                 }}
                 
                 .streamlit-expanderHeader {{
                     direction: rtl !important;
                     display: flex !important;
                     flex-direction: row-reverse !important;
+                    justify-content: center !important;
                 }}
                 
                 [data-testid="stExpander"] > details > summary {{
@@ -70,16 +89,17 @@ def load_font(font_path):
                 
                 .profit-box {{
                     background: linear-gradient(135deg, #00C853 0%, #00E676 100%);
-                    padding: 1.5rem;
+                    padding: clamp(1rem, 3vw, 1.5rem);
                     border-radius: 15px;
                     color: white;
                     text-align: center;
-                    margin: 1rem 0;
+                    margin: 1rem auto;
+                    max-width: 600px;
                 }}
                 
                 .highlight-box {{
                     background: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%);
-                    padding: 1.2rem;
+                    padding: clamp(0.8rem, 2vw, 1.2rem);
                     border-radius: 12px;
                     color: white;
                     text-align: center;
@@ -87,11 +107,12 @@ def load_font(font_path):
                 
                 .info-box {{
                     background: linear-gradient(135deg, #2196F3 0%, #42A5F5 100%);
-                    padding: 1rem;
+                    padding: clamp(0.8rem, 2vw, 1rem);
                     border-radius: 10px;
                     color: white;
                     text-align: center;
-                    margin: 0.5rem 0;
+                    margin: 0.5rem auto;
+                    max-width: 500px;
                 }}
                 
                 .warning-box {{
@@ -113,15 +134,145 @@ def load_font(font_path):
                 .stButton > button {{
                     background: linear-gradient(135deg, #FF4B4B 0%, #FF6B6B 100%);
                     color: white;
-                    font-size: 1.3rem;
-                    padding: 1rem 2rem;
+                    font-size: clamp(1rem, 2.5vw, 1.3rem);
+                    padding: clamp(0.8rem, 2vw, 1rem) clamp(1rem, 3vw, 2rem);
                     border-radius: 12px;
                     border: none;
                     width: 100%;
+                    max-width: 400px;
+                    margin: 0 auto;
+                    display: block;
+                }}
+                
+                /* هیرو سکشن */
+                .hero-section {{
+                    position: relative;
+                    min-height: 100vh;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    overflow: hidden;
+                    margin: -1rem -1rem 2rem -1rem;
+                }}
+                
+                .hero-bg {{
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-size: cover;
+                    background-position: center;
+                    animation: slideshow 15s infinite;
+                    z-index: 0;
+                }}
+                
+                .hero-bg::before {{
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 100%);
+                    z-index: 1;
+                }}
+                
+                @keyframes slideshow {{
+                    0%, 30% {{ background-image: url('data:image/jpeg;base64,{bg1_b64}'); }}
+                    33%, 63% {{ background-image: url('data:image/jpeg;base64,{bg2_b64}'); }}
+                    66%, 100% {{ background-image: url('data:image/jpeg;base64,{bg3_b64}'); }}
+                }}
+                
+                .hero-content {{
+                    position: relative;
+                    z-index: 2;
+                    color: white;
+                    padding: clamp(1rem, 4vw, 2rem);
+                    max-width: 900px;
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                }}
+                
+                .logo-img {{
+                    width: clamp(80px, 15vw, 120px);
+                    height: clamp(80px, 15vw, 120px);
+                    border-radius: 50%;
+                    box-shadow: 0 10px 40px rgba(255,255,0,0.3);
+                    margin-bottom: clamp(1rem, 3vw, 1.5rem);
+                }}
+                
+                .hero-title {{
+                    font-size: clamp(1.5rem, 5vw, 3rem);
+                    font-weight: bold;
+                    margin-bottom: 0.5rem;
+                    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+                    text-align: center;
+                    width: 100%;
+                }}
+                
+                .hero-subtitle {{
+                    font-size: clamp(0.9rem, 2.5vw, 1.3rem);
+                    margin-bottom: clamp(1.5rem, 4vw, 2rem);
+                    opacity: 0.9;
+                    text-align: center;
+                    width: 100%;
+                }}
+                
+                .hero-stats {{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: clamp(1rem, 5vw, 3rem);
+                    flex-wrap: wrap;
+                    width: 100%;
+                }}
+                
+                .stat-item {{
+                    text-align: center;
+                    min-width: clamp(80px, 20vw, 120px);
+                }}
+                
+                .stat-value {{
+                    font-size: clamp(1.3rem, 4vw, 2.5rem);
+                    font-weight: bold;
+                    color: #FFD700;
+                    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+                }}
+                
+                .stat-label {{
+                    font-size: clamp(0.7rem, 1.8vw, 0.9rem);
+                    opacity: 0.8;
+                }}
+                
+                .calc-container {{
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: clamp(1rem, 3vw, 2rem);
+                    text-align: center;
+                }}
+                
+                .calc-container h3 {{
+                    text-align: center !important;
                 }}
                 
                 #MainMenu {{visibility: hidden;}}
                 footer {{visibility: hidden;}}
+                header {{visibility: hidden;}}
+                
+                /* رسپانسیو برای موبایل */
+                @media (max-width: 768px) {{
+                    .hero-stats {{
+                        gap: 1rem;
+                    }}
+                    .stat-item {{
+                        flex: 0 0 30%;
+                    }}
+                }}
             </style>
         """, unsafe_allow_html=True)
         return True
@@ -129,6 +280,32 @@ def load_font(font_path):
         return False
 
 load_font("IRANYekanX-Bold.ttf")
+
+# ================== هیرو سکشن ==================
+st.markdown(f"""
+<div class="hero-section">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+        <img src="data:image/png;base64,{logo_b64}" class="logo-img" alt="لوگو">
+        <h1 class="hero-title">شرکت توزیعنیروی  برق تهران بزرگ</h1>
+        <p class="hero-subtitle">نرم افزار محاسبه نیروگاه های خورشیدی</p>
+        <div class="hero-stats">
+            <div class="stat-item">
+                <div class="stat-value">۲۰</div>
+                <div class="stat-label">سال قرارداد</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">۳,۸۲۰</div>
+                <div class="stat-label">تومان/kWh</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">۳۰٪</div>
+                <div class="stat-label">رشد سالانه</div>
+            </div>
+        </div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 # ================== ثوابت فرمول ساتبا ==================
 T_BASE = 3820  # نرخ پایه (تومان/kWh)
@@ -371,15 +548,8 @@ def get_suitable_inverter(capacity_kw, brand):
 
 # ================== فرمول ساتبا - ماهانه ==================
 def calculate_satba_rate_monthly(month_index, monthly_inflation, k3, k4):
-    """
-    فرمول ساتبا با افزایش ماهانه:
-    B = T × K1 × K2 × K3 × K4
-    
-    month_index: شماره ماه از شروع (0 = ماه اول)
-    monthly_inflation: تورم ماهانه
-    """
     k1 = (1 + monthly_inflation) ** month_index
-    k2 = 1.0  # ضریب ساعتی
+    k2 = 1.0
     B = T_BASE * k1 * k2 * k3 * k4
     return B
 
@@ -434,37 +604,6 @@ def calculate_solar_production(lat, lon, capacity_kw, tilt=35):
     monthly_production = {m: yearly * f for m, f in monthly_factors.items()}
     return {'success': True, 'yearly': yearly, 'monthly': monthly_production, 'source': 'محاسبه محلی', 'ghi': base_ghi}
 
-def suggest_best_system(roof_area, panels_dict, selected_power=None):
-    """پیشنهاد بهترین سیستم با در نظر گرفتن فاصله بین پنل‌ها"""
-    usable_area = roof_area * 0.75  # 75% قابل استفاده
-    suggestions = []
-    
-    for panel_name, panel_data in panels_dict.items():
-        panel_area = panel_data["area"]
-        power = selected_power if selected_power else panel_data["default_power"]
-        
-        # محدود کردن به رنج توان مجاز
-        power = max(panel_data["power_range"][0], min(panel_data["power_range"][1], power))
-        
-        count = math.floor(usable_area / panel_area)
-        if count > 0:
-            capacity_kw = (count * power) / 1000
-            suggestions.append({
-                "panel_name": panel_name,
-                "panel_power": power,
-                "power_range": panel_data["power_range"],
-                "count": count,
-                "capacity_kw": round(capacity_kw, 2),
-                "total_area": round(count * panel_area, 2),
-                "efficiency": panel_data["efficiency"],
-                "origin": panel_data["origin"],
-                "dimensions": f"{panel_data['length_mm']} × {panel_data['width_mm']} × {panel_data['thickness_mm']} mm",
-                "area_per_panel": panel_data["area"]
-            })
-    
-    suggestions.sort(key=lambda x: x["capacity_kw"], reverse=True)
-    return suggestions
-
 def calculate_roi(yearly_incomes, initial_cost):
     cumulative = 0
     for year_idx, income in enumerate(yearly_incomes, start=1):
@@ -475,16 +614,9 @@ def calculate_roi(yearly_incomes, initial_cost):
             return year_idx - 1 + (month_fraction / 12)
     return None
 
-# ================== UI اصلی ==================
-st.markdown("""
-<div style="text-align: center; padding: 1rem;">
-    <h1 style="color: #FF4B4B;">☀️ محاسبه‌گر نیروگاه خورشیدی</h1>
-    <h4 style="color: #666;">محاسبه دقیق </h4>
-</div>
-""", unsafe_allow_html=True)
+# ================== بخش محاسبه ==================
+st.markdown('<div class="calc-container">', unsafe_allow_html=True)
 
-
-# ================== نقشه ==================
 st.markdown("### 🌍 محل نصب")
 
 default_lat, default_lon = 35.6892, 51.3890
@@ -506,10 +638,10 @@ if map_output and map_output.get('last_clicked'):
     elif 37.9 < lat < 38.3 and 46.2 < lon < 46.5: city = "تبریز"
     elif 30.2 < lat < 30.5 and 48.2 < lon < 48.5: city = "اهواز"
     
-    st.success(f"📍 **{city}** | عرض: {lat:.4f}° | طول: {lon:.4f}°")
+    st.success(f"📍 **{city}**")
 else:
     lat, lon = default_lat, default_lon
-    st.info("📍 تهران - برای دقت بیشتر روی نقشه کلیک کنید")
+    st.info("📍 تهران")
 
 st.markdown("---")
 
@@ -520,7 +652,6 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     roof_area = st.number_input("متراژ بام (m²)", value=30, min_value=10, max_value=500, step=5)
-    st.caption(f"💡 ظرفیت تقریبی: {to_persian_number(round(roof_area * 0.75 / 10 * 1.5, 1))} تا {to_persian_number(round(roof_area * 0.75 / 10 * 2, 1))} کیلووات")
 
 with col2:
     tilt_angle = st.number_input("زاویه نصب (درجه)", value=35, min_value=10, max_value=45, step=5)
@@ -555,16 +686,6 @@ with col_panel2:
 
 selected_panel_data = available_panels[selected_panel_name]
 
-# نمایش اطلاعات پنل انتخابی
-st.markdown(f"""
-<div class="info-box">
-    <b>ابعاد:</b> {selected_panel_data['dimensions'] if 'dimensions' in selected_panel_data else f"{selected_panel_data['length_mm']} × {selected_panel_data['width_mm']} × {selected_panel_data['thickness_mm']} mm"} | 
-    <b>مساحت:</b> {to_persian_number(selected_panel_data['area'])} m² | 
-    <b>رنج توان:</b> {to_persian_number(selected_panel_data['power_range'][0])} - {to_persian_number(selected_panel_data['power_range'][1])} وات |
-    <b>بازده:</b> {to_persian_number(selected_panel_data['efficiency'])}%
-</div>
-""", unsafe_allow_html=True)
-
 # انتخاب توان پنل
 panel_power = st.slider(
     "توان پنل (وات)",
@@ -594,7 +715,7 @@ st.markdown("### ⚡ انتخاب اینورتر")
 inverter_brand = st.selectbox(
     "برند اینورتر",
     list(INVERTERS.keys()),
-    format_func=lambda x: f"{x} ({INVERTERS[x]['origin']}) - گارانتی {INVERTERS[x]['warranty']} سال"
+    format_func=lambda x: f"{x} ({INVERTERS[x]['origin']})"
 )
 
 selected_inverter = get_suitable_inverter(capacity_kw, inverter_brand)
@@ -606,9 +727,9 @@ if selected_inverter:
     inv_col3.metric("قیمت تقریبی", format_currency(selected_inverter['price']))
 
 # ================== مقادیر ثابت قرارداد ==================
-k4 = 1.0  # قرارداد ۸ ساله
-contract_years = 8
-k3 = 1.2  # ساخت داخل ۲۰٪
+k4 = 1.0
+contract_years = 20
+k3 = 1.2
 cost_per_watt = 35000
 annual_inflation = 0.30
 monthly_inflation = (1 + annual_inflation) ** (1/12) - 1
@@ -618,12 +739,16 @@ panel_cost = capacity_kw * 1000 * cost_per_watt
 inverter_cost = selected_inverter['price'] if selected_inverter else 0
 initial_cost = panel_cost + inverter_cost
 
-st.info(f"💰 **هزینه کل:** {format_currency(initial_cost)} تومان")
+st.markdown(f"""
+<div class="info-box">
+    💰 هزینه کل: {format_currency(initial_cost)} تومان
+</div>
+""", unsafe_allow_html=True)
 
 st.markdown("---")
 
 # ================== دکمه محاسبه ==================
-if st.button("🚀 محاسبه دقیق درآمد", type="primary", use_container_width=True):
+if st.button("🚀 محاسبه درآمد", type="primary", use_container_width=True):
     
     with st.spinner("📡 دریافت داده‌های ماهواره‌ای..."):
         pvgis_result = get_pvgis_data(lat, lon, capacity_kw, tilt_angle)
@@ -632,9 +757,7 @@ if st.button("🚀 محاسبه دقیق درآمد", type="primary", use_contai
         yearly_production = pvgis_result['yearly'] * (1 - shading_loss)
         monthly_prod = {m: v * (1 - shading_loss) for m, v in pvgis_result['monthly'].items()}
         data_source = pvgis_result['source']
-        st.success(f"✅ داده‌های ماهواره‌ای {data_source} دریافت شد")
     else:
-        st.warning("⚠️ استفاده از محاسبه محلی...")
         local_result = calculate_solar_production(lat, lon, capacity_kw, tilt_angle)
         yearly_production = local_result['yearly'] * (1 - shading_loss)
         monthly_prod = {m: v * (1 - shading_loss) for m, v in local_result['monthly'].items()}
@@ -645,14 +768,12 @@ if st.button("🚀 محاسبه دقیق درآمد", type="primary", use_contai
     months_order = ["فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
                     "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"]
     
-    total_months = 20 * 12
     contract_months = contract_years * 12
     
-    all_monthly_data = []
     yearly_data = []
     income_list = []
     
-    for year in range(1, 21):
+    for year in range(1, contract_years + 1):
         degradation_factor = 1 - ((year - 1) * DEGRADATION)
         year_income = 0
         year_production = 0
@@ -662,25 +783,11 @@ if st.button("🚀 محاسبه دقیق درآمد", type="primary", use_contai
             month_name = months_order[month_idx]
             
             prod = monthly_prod.get(month_name, yearly_production/12) * degradation_factor
-            
-            # تمام تولید به شبکه فروخته می‌شود
-            if global_month < contract_months:
-                rate = calculate_satba_rate_monthly(global_month, monthly_inflation, k3, k4)
-            else:
-                rate = 0
-            
+            rate = calculate_satba_rate_monthly(global_month, monthly_inflation, k3, k4)
             income = prod * rate
             
             year_income += income
             year_production += prod
-            
-            all_monthly_data.append({
-                "سال": year,
-                "ماه": month_name,
-                "تولید": int(prod),
-                "نرخ": int(rate),
-                "درآمد": int(income)
-            })
         
         income_list.append(year_income)
         yearly_data.append({
@@ -691,17 +798,15 @@ if st.button("🚀 محاسبه دقیق درآمد", type="primary", use_contai
     
     df_yearly = pd.DataFrame(yearly_data)
     roi_years = calculate_roi(income_list, initial_cost)
-    total_20y = sum(income_list)
-    profit_20y = total_20y - initial_cost
-    income_contract = sum(income_list[:contract_years])
+    total_income = sum(income_list)
+    profit = total_income - initial_cost
     
     # ================== نمایش نتایج ==================
     
     st.markdown(f"""
     <div class="profit-box">
         <h2>💰 سود خالص ۲۰ ساله</h2>
-        <h1 style="font-size: 2.5rem;">{format_currency(profit_20y)} تومان</h1>
-        <p>درآمد دوره قرارداد ({contract_years} سال): {format_currency(income_contract)}</p>
+        <h1 style="font-size: clamp(1.8rem, 5vw, 2.5rem);">{format_currency(profit)} تومان</h1>
     </div>
     """, unsafe_allow_html=True)
     
@@ -718,111 +823,48 @@ if st.button("🚀 محاسبه دقیق درآمد", type="primary", use_contai
         st.metric("درآمد سال اول", format_currency(income_y1))
     
     with m4:
-        if roi_years and roi_years <= 20:
+        if roi_years and roi_years <= contract_years:
             years = int(roi_years)
             months = int((roi_years - years) * 12)
             roi_text = f"{to_persian_number(years)} سال و {to_persian_number(months)} ماه"
         else:
-            roi_text = "> ۲۰ سال"
+            roi_text = f"> {contract_years} سال"
         st.metric("بازگشت سرمایه", roi_text)
     
-    # نمایش نرخ‌ها
-    st.markdown("---")
-    st.markdown("### 📈 نرخ خرید در طول زمان")
-    
-    rate_m1 = calculate_satba_rate_monthly(0, monthly_inflation, k3, k4)
-    rate_m12 = calculate_satba_rate_monthly(11, monthly_inflation, k3, k4)
-    rate_m24 = calculate_satba_rate_monthly(23, monthly_inflation, k3, k4)
-    rate_m60 = calculate_satba_rate_monthly(59, monthly_inflation, k3, k4)
-    rate_end = calculate_satba_rate_monthly(contract_months - 1, monthly_inflation, k3, k4)
-    
-    r1, r2, r3, r4, r5 = st.columns(5)
-    r1.metric("ماه اول", f"{to_persian_number(int(rate_m1))} تومان")
-    r2.metric("ماه ۱۲", f"{to_persian_number(int(rate_m12))} تومان")
-    r3.metric("ماه ۲۴", f"{to_persian_number(int(rate_m24))} تومان")
-    r4.metric("ماه ۶۰", f"{to_persian_number(int(rate_m60))} تومان")
-    r5.metric(f"آخرین ماه قرارداد", f"{to_persian_number(int(rate_end))} تومان")
-    
-    # تولید ماهانه
-    st.markdown("---")
-    st.markdown("### 📅 تولید ماهانه")
-    
+    # نمودار تولید ماهیانه (مستطیلی)
+    st.markdown("### 📅 تولید ماهیانه")
     prod_values = [monthly_prod.get(m, 0) for m in months_order]
     chart_monthly = pd.DataFrame({'ماه': months_order, 'تولید (kWh)': prod_values}).set_index('ماه')
     st.bar_chart(chart_monthly, color="#FF6B35")
     
     # نمودار درآمد سالانه
-    st.markdown("### 💰 درآمد سالانه")
-    st.markdown(f"""
-    <div class="warning-box">
-        ⚠️ پس از پایان قرارداد {contract_years} ساله، درآمد به صفر می‌رسد
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown("### 📈 درآمد سالانه")
     
     chart_income = pd.DataFrame({
         'سال': df_yearly['سال'],
-        'درآمد (میلیون)': df_yearly['درآمد (تومان)'] / 1e6
+        'درآمد (میلیارد)': df_yearly['درآمد (تومان)'] / 1e9
     }).set_index('سال')
     st.line_chart(chart_income, color="#00C853")
     
     # جدول سالانه
-    with st.expander("جدول سالانه", expanded=False):
+    with st.expander("جدول سالانه"):
         df_show = df_yearly.copy()
         df_show['سال'] = df_show['سال'].apply(to_persian_number)
         df_show['تولید (kWh)'] = df_show['تولید (kWh)'].apply(lambda x: to_persian_number(x))
         df_show['درآمد (تومان)'] = df_show['درآمد (تومان)'].apply(lambda x: to_persian_number(x))
         st.dataframe(df_show, use_container_width=True, hide_index=True)
-    
-    # ================== مقایسه ==================
-    st.markdown("---")
-    st.markdown("### 📊 مقایسه با سایر سرمایه‌گذاری‌ها")
-    
-    bank_return = initial_cost * ((1.25) ** 20)
-    gold_return = initial_cost * ((1.30) ** 20)
-    stock_return = initial_cost * ((1.20) ** 20)
-    solar_return = total_20y
-    
-    investments = [
-        ("☀️ نیروگاه خورشیدی", solar_return, solar_return - initial_cost),
-        ("🏦 سپرده بانکی ۲۵٪", bank_return, bank_return - initial_cost),
-        ("🥇 طلا ۳۰٪", gold_return, gold_return - initial_cost),
-        ("📈 بورس ۲۰٪", stock_return, stock_return - initial_cost),
-    ]
-    
-    investments_sorted = sorted(investments, key=lambda x: x[2], reverse=True)
-    winner = investments_sorted[0][0]
-    
-    comp_data = {"سرمایه‌گذاری": [], "ارزش ۲۰ ساله": [], "سود خالص": [], "رتبه": []}
-    
-    for rank, (name, total, profit) in enumerate(investments_sorted, 1):
-        medal = "🥇" if rank == 1 else "🥈" if rank == 2 else "🥉" if rank == 3 else ""
-        comp_data["سرمایه‌گذاری"].append(name)
-        comp_data["ارزش ۲۰ ساله"].append(format_currency(total))
-        comp_data["سود خالص"].append(format_currency(profit))
-        comp_data["رتبه"].append(f"{medal} {to_persian_number(rank)}")
-    
-    st.table(pd.DataFrame(comp_data))
-    
-    if winner == "☀️ نیروگاه خورشیدی":
-        st.markdown("""
-        <div class="winner-box" style="background: #00C853; color: white;">
-            <h3>🏆 نیروگاه خورشیدی سودآورترین گزینه است!</h3>
-        </div>
-        """, unsafe_allow_html=True)
-    else:
-        diff = investments_sorted[0][2] - profit_20y
-        st.markdown(f"""
-        <div class="winner-box" style="background: #FF6B35; color: white;">
-            <h3>⚠️ {winner} با {format_currency(diff)} سود بیشتر رتبه اول است</h3>
-        </div>
-        """, unsafe_allow_html=True)
 
-# فوتر
+st.markdown('</div>', unsafe_allow_html=True)
+
+# ================== فوتر ==================
 st.markdown("---")
 st.markdown("""
-<div style="text-align: center; padding: 1rem; background: #f0f2f6; border-radius: 10px;">
-    <p style="color: #666;">📐 محاسبه طبق فرمول ساتبا | 📡 داده‌های PVGIS</p>
-    <p style="color: #666;">📏 هر ۱۰ متر مربع ≈ ۱.۵ تا ۲ کیلووات</p>
-    <p style="color: #0068c9; font-weight: bold;">مهندس منتظری‌ها | مهندس اکبرپور</p>
+<div style="text-align: center; padding: 2rem; background: #1a1a2e; border-radius: 10px; color: white;">
+    <p style="color: #FFD700; font-size: clamp(1rem, 2.5vw, 1.2rem); font-weight: bold;">
+        نظارت عالیه: مهندس نقی اکبرپور
+    </p>
+    <p style="color: #FFD700; font-size: clamp(1rem, 2.5vw, 1.2rem); font-weight: bold;">
+        طراح : مهندس محمدصادق منتظریها
+    </p>
 </div>
 """, unsafe_allow_html=True)
